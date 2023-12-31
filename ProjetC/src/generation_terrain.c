@@ -304,3 +304,5 @@ void affiche_chemin(Terrain plateau) {
         fprintf(stdout, "\n");
     }
 }
+
+

@@ -16,8 +16,10 @@ typedef struct{
     Lst_Tour tours;
 }Game;
 
+/* fonction qui initialise la structure Game */
 void initialise(Game *jeu);
 
+/* fonction qui realise le jeu */
 void moteur(Game *jeu);
 
 #endif

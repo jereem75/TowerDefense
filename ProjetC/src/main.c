@@ -8,7 +8,7 @@
 #include "../include/moteur.h"
 
 int main(){
-    MLV_create_window("TowerDefense", "TowerD", 1500, 1500);
+    MLV_create_window("TowerDefense", "TowerD", 1512, 1500);
     srand(time(NULL));
     Game jeu;
     initialise(&jeu);

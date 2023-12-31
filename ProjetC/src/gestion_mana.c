@@ -12,12 +12,13 @@ void intialisation_mana( Mana *mana){
 }
 
 void up_lvl_mana( Mana *mana){
-    if(mana->nb_max_mana * 0.25 > mana->nb_mana){
+    int n = (int)(500 * pow(1.4, mana->niveau));
+    if(n > mana->nb_mana){
         fprintf(stderr, " nb de mana insuffisant\n");
         return;
     }
     mana->niveau ++;
-    mana->nb_mana  -= (int)(500 * pow(1.4, mana->niveau));
+    mana->nb_mana  -= n;
     mana->nb_max_mana = (int)(2000 * pow(1.4, mana->niveau));
     
 }

@@ -5,6 +5,7 @@
 #include "gestion_monstre.h"
 
 
+
 typedef struct{
     int niveau;
     int nb_mana;

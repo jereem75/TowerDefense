@@ -24,4 +24,8 @@ int est_case_tour(Lst_Tour lst, Case a);
 /* fonction qui construit une tour si cela est possible */
 void build_tour(Terrain plateau, Mana *gestion, Lst_Tour *lst, int x, int y);
 
+/* fonction qui ajoute la gem pris en parametre dans la tour*/
+void add_gemme_tour(Liste_gemme *lst_gem,Lst_Tour *lst,Gemme *gem, int x, int y);
+
+
 #endif
