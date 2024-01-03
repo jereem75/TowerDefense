@@ -7,6 +7,7 @@
 #include "moteur.h"
 #include <MLV/MLV_all.h>
 # define LONGUEUR_CASE 54
+# define CENTRE_CASE LONGUEUR_CASE / 2
 
 
 /* fonction qui affiche le plateau de jeu */
@@ -31,5 +32,9 @@ int est_case_grille(int x, int y);
 
 /* fonction qui affiche les tours du jeu */
 void affiche_tours(Game jeu, int statut_t);
+
+void info_vague(Game jeu, long int temps);
+
+void affiche_monstres(Game jeu);
 
 #endif

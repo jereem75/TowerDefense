@@ -9,6 +9,7 @@
 
 
 void afficher_plateau(Terrain *jeu) {
+    //printf("test\n");
     int i, j;
     for (i = 0; i < LIG; i++) {
         for (j = 0; j < COL; j++) {
@@ -56,7 +57,8 @@ void affiche_file_gemme(Game jeu, int statut_gemme){
 void affiche_infos(){
     MLV_draw_adapted_text_box(0,1255,"Gemmes générées:", 25, MLV_COLOR_BLACK, MLV_COLOR_WHITE, MLV_COLOR_BLACK, MLV_TEXT_CENTER);
     MLV_draw_text_box(1000,1190,90,40, "UP LVL",25,MLV_COLOR_BLACK,MLV_COLOR_BLACK,MLV_COLOR_WHITE,MLV_TEXT_CENTER,MLV_HORIZONTAL_CENTER,MLV_VERTICAL_CENTER);
-     MLV_draw_text_box(1000,1240,90,40, "DOWN LVL",25,MLV_COLOR_BLACK,MLV_COLOR_BLACK,MLV_COLOR_WHITE,MLV_TEXT_CENTER,MLV_HORIZONTAL_CENTER,MLV_VERTICAL_CENTER);
+    MLV_draw_text_box(1000,1240,90,40, "DOWN LVL",25,MLV_COLOR_BLACK,MLV_COLOR_BLACK,MLV_COLOR_WHITE,MLV_TEXT_CENTER,MLV_HORIZONTAL_CENTER,MLV_VERTICAL_CENTER);
+
 }
 
 void affiche_mana(Mana mana, int lvl_selected){
@@ -76,12 +78,16 @@ int clic(Game *game, int *statut_t, int *statut_gemme, int *lvl_selected) {
     MLV_Input_box *input_box;
     int x, y;
     MLV_Button_state state;
-    event = MLV_wait_event(&key_sym, NULL, &unicode, &texte, &input_box, &x, &y, &mouse_button, &state);
+    event = MLV_get_event(&key_sym, NULL, &unicode, &texte, &input_box, &x, &y, &mouse_button, &state);
     if (event == MLV_MOUSE_BUTTON) {
         if (state == MLV_RELEASED) {
             if (x > 1100 && x < 1512 && y > 1190 && y < 1290) {
                 cree_gemme(&(game)->mana, &(game)->gemmes, *lvl_selected);
                 return 0;
+            }
+            else if(x > 1100 && x < 1512 && y > 1410 && x < 1485){
+                game->vagues.vague_actuelle ++;
+                return 1;
             }
             else if(x > 1100 && x < 1512 && y > 1300 && y < 1400){
                 up_lvl_mana( &(game)->mana);
@@ -212,3 +218,21 @@ void affiche_tours(Game jeu, int statut_t ){
 }
 
 
+void affiche_monstres(Game jeu){
+    int n = jeu.vagues.vague_actuelle + 1;
+    for(int i = 0; i < n; i ++){
+        int nb = jeu.vagues.tab[i].nb_monstres;
+        for (int j = 0; j < nb; j++){
+            MLV_draw_filled_circle(jeu.vagues.tab[i].monstres[j].y, jeu.vagues.tab[i].monstres[j].x, 15, MLV_COLOR_RED);
+        }
+    }
+}
+
+
+void info_vague(Game jeu, long int temps){
+    MLV_draw_text_box(1100,1410,412,85, "LANCER LA VAGUE %d",25,MLV_COLOR_BLACK,MLV_COLOR_BLACK,MLV_COLOR_WHITE,MLV_TEXT_CENTER,MLV_HORIZONTAL_CENTER,MLV_VERTICAL_CENTER, jeu.vagues.vague_actuelle + 2);
+    if(jeu.vagues.vague_actuelle >= 0){
+        MLV_draw_text_box(0,1460, 500, 50, "VAGUE N°%d, TEMPS RESTANT AVANT LA PROCHAINE VAGUE %ld",25,MLV_COLOR_BLACK,MLV_COLOR_WHITE,MLV_COLOR_BLACK,MLV_TEXT_CENTER,MLV_HORIZONTAL_CENTER,MLV_VERTICAL_CENTER, jeu.vagues.vague_actuelle + 1, temps);
+
+    }
+}

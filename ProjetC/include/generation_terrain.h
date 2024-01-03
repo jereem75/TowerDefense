@@ -18,6 +18,7 @@ typedef enum{
 typedef struct{
     int x;
     int y;
+    Direction suiv;
 }Case;
 
 typedef struct{

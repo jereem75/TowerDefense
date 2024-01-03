@@ -14,7 +14,7 @@ typedef struct{
 
 
 /* foction qui initialise la structure mana*/
-void intialisation_mana( Mana *mana);
+void initialisation_mana( Mana *mana);
 
 /* fonction qui ameliore le niveau de la mana si cela est possible */
 void up_lvl_mana( Mana *mana);

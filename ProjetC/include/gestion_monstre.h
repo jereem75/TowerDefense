@@ -19,27 +19,33 @@ typedef struct{
     int hp_restants;
     int hp_initial;
     int teinte;
-    Case position;
+    double x;
+    double y;
+    int indice_case_actuelle;
 } Monstre;
 
 typedef struct{
     Type type_vague;
-    int nb_vague;
     Monstre monstres[24];
     int nb_monstres;
     int vitesse;
 } Vague;
 
+typedef struct{
+    Vague tab[100];
+    int vague_actuelle;
+}Lst_Vague;
+
 /* fonction qui renvoie un type de vague en fonction des probabilites*/
 Type random_vague();
 
 /* fonction qui initialise la structure Monstre*/
-void intialisation_monstre(Terrain plateau, Vague *new);
+void intialisation_monstre(Terrain plateau, Vague *new, int nb_vague);
 
 /* fonction qui initialise la structure Vague */
-void initialisation_vague(Terrain plateau, Vague *new);
+void initialisation_vague(Terrain plateau, Lst_Vague* lst);
 
-/* fonction qui libere la liste de monstre */
-void liberation_monstres(Terrain plateau, Vague *vague);
+void update_monster(Terrain plateau, Lst_Vague *lst);
+
 
 #endif

@@ -14,7 +14,8 @@ int main(){
     initialise(&jeu);
     //afficherTableau(test);
     generation(&(jeu).plateau);
-    affiche_chemin(jeu.plateau);
+    printf("main\n");
+    //affiche_chemin(jeu.plateau);
     afficher_plateau(&(jeu).plateau);
     //printf("longuueur = %d, virage = %d\n", test.longueur, test.nb_virages);
     moteur(&jeu);

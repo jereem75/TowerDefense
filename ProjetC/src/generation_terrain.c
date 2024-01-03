@@ -24,6 +24,7 @@ void random_nid(Terrain *plateau){
         }
         plateau->nid.x = x;
         plateau->nid.y = y;
+        plateau->nid.suiv = HAUT;
         break;
     }
 }
@@ -145,11 +146,13 @@ void generation(Terrain *plateau){
     plateau->longueur ++;
     Direction dir = direction_initiale(*plateau, plateau->nid);
     Case initial = plateau->nid;
-    
     while (plateau->longueur < 75 || plateau->nb_virages <= 7) {
-        //printf("test\n");
+        //printf("boucle\n");
         int n = etendu(*plateau, initial, dir);
+        //printf("etendue %d\n", n);
+        //printf("longueur = %d\n", plateau->longueur);
         if (n <= 2) {
+            
             printf("erreur\n");
             free(plateau->chemin);
             plateau->chemin = NULL;
@@ -179,8 +182,8 @@ void generation(Terrain *plateau){
         //affiche_chemin(*plateau);
         //sleep(1);
     }
-
     plateau->nb_virages  --;
+    //test(*plateau);
 }
 
 
@@ -209,15 +212,22 @@ void ajoute_cases_chemin(Terrain *plateau, Case a, Direction dir, int nb_cases){
                 return; 
         }
         if(plateau->longueur >= 75){
+            //printf("test\n");
             plateau->chemin = (Case*)realloc(plateau->chemin, sizeof(Case) * (plateau->longueur + 1));
             if(plateau->chemin == NULL){
                 fprintf(stderr, "Erreur d'allocation\n");
                 return;  
             }
         }
+        plateau->chemin[plateau->longueur - 1].suiv = dir;
+        suiv.suiv = dir;
         plateau->chemin[plateau->longueur] = suiv;
         plateau->longueur ++;
+        
+        
     }
+    //printf("%d\n", plateau->longueur);
+    //printf("%d\n", plateau->nb_virages);
 }
 
 
@@ -305,4 +315,8 @@ void affiche_chemin(Terrain plateau) {
     }
 }
 
-
+void test(Terrain jeu){
+    for(int i = 0; i < jeu.longueur; i++){
+        printf("Case %d suiv = %d\n", i, jeu.chemin[i].suiv);
+    }
+}

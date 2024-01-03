@@ -3,6 +3,7 @@
 #include <math.h>
 #include "../include/gestion_monstre.h"
 #include "../include/generation_terrain.h"
+#include "../include/graphique.h"
 
 
 Type random_vague(){
@@ -19,66 +20,106 @@ Type random_vague(){
     return BOSS;
 }
 
-void initialisation_vague(Terrain plateau, Vague *new){
-    new->nb_vague ++; // nouvelle vague donc on incremente
+void initialisation_vague(Terrain plateau, Lst_Vague* lst){
     Type type_vague = random_vague();
     while(1){
-        if( type_vague == BOSS && new->nb_vague < 5){
+        if( type_vague == BOSS && lst->vague_actuelle < 5){
             type_vague = random_vague();
         }
         else{
             break;
         }
     }
+    printf("type%d\n", type_vague);
     switch(type_vague){
         case NORMAL:
-            new->nb_monstres = 12;
-            new->vitesse = 1;
-            break;
+            lst->tab[lst->vague_actuelle].nb_monstres = 12;
+            lst->tab[lst->vague_actuelle].vitesse = 1;
         case FOULE:
-            new->nb_monstres = 24;
-            new->vitesse = 1;
+            lst->tab[lst->vague_actuelle].nb_monstres = 24;
+            lst->tab[lst->vague_actuelle].vitesse = 1;
+            break;
         case AGILE:
-            new->nb_monstres = 12;
-            new->vitesse = 2;
+            lst->tab[lst->vague_actuelle].nb_monstres = 12;
+            lst->tab[lst->vague_actuelle].vitesse = 2;
         case BOSS:
-            new->nb_monstres = 2;
-            new->vitesse = 1;
-        default:
-            fprintf(stderr, "erreur de type\n");
-            return;
-            
+            lst->tab[lst->vague_actuelle].nb_monstres = 2;
+            lst->tab[lst->vague_actuelle].vitesse = 1;
+
     }
-    intialisation_monstre(plateau, new);
+    lst->tab[lst->vague_actuelle].type_vague = type_vague;
+    intialisation_monstre(plateau, &lst->tab[lst->vague_actuelle], lst->vague_actuelle);
 }
 
 
-void intialisation_monstre(Terrain plateau, Vague *new){
+void intialisation_monstre(Terrain plateau, Vague *new, int nb_vague){
     for(int i = 0; i < new->nb_monstres; i++){
         if(new->type_vague == BOSS){
-           new->monstres[i].hp_initial = (int)(H * pow(1.2, new->nb_vague)); 
+           new->monstres[i].hp_initial = (int)(H * pow(1.2, nb_vague)); 
         }
         else{
-            new->monstres[i].hp_initial = (int)(12 * H * pow(1.2, new->nb_vague));
+            new->monstres[i].hp_initial = (int)(12 * H * pow(1.2, nb_vague));
         }
         
         new->monstres[i].hp_restants = new->monstres[i].hp_initial;
         new->monstres[i].vitesse = new->vitesse;
         new->monstres[i].teinte = rand() % 360;
-        new->monstres[i].position.x = plateau.nid.x;
-        new->monstres[i].position.y = plateau.nid.y;
+        new->monstres[i].x = plateau.nid.x * LONGUEUR_CASE + CENTRE_CASE;
+        new->monstres[i].y = plateau.nid.y * LONGUEUR_CASE + CENTRE_CASE;
+        new->monstres[i].indice_case_actuelle = 0;
     }
 
 }
 
-void liberation_monstres(Terrain plateau, Vague *vague) {
-    for (int i = 0; i < vague->nb_monstres; i++) {
-        vague->monstres[i].hp_initial = 0;
-        vague->monstres[i].hp_restants = 0;
-        vague->monstres[i].teinte = 0;
-        vague->monstres[i].vitesse = 0;
-        vague->monstres[i].position.x = plateau.nid.x;
-        vague->monstres[i].position.y = plateau.nid.y;
-    }
-    vague->nb_monstres = 0;
+double generate_random_value(double v) {
+    // Utilisez srand une fois au début pour initialiser le générateur de nombres aléatoires
+    // srand(time(NULL));
+
+    // Générez un nombre entier aléatoire entre 10 et 110
+    int random_factor = rand() % 101 + 10;
+
+    // Convertissez le facteur aléatoire en un facteur décimal
+    double random_factor_decimal = random_factor / 100.0;
+
+    // Calculez la valeur finale dans la plage spécifiée
+    double result = random_factor_decimal * v / 60.0;
+
+    return result;
 }
+
+void update_monster(Terrain plateau, Lst_Vague *lst){
+    for(int i = 0; i < lst->vague_actuelle; i++){
+        int n = lst->tab[i].nb_monstres;
+        int vitesse = lst->tab[i].vitesse;
+        for(int j = 0; j < n; j++){
+            double d = generate_random_value(vitesse);
+            switch(plateau.chemin[lst->tab[i].monstres[j].indice_case_actuelle].suiv){
+            case HAUT:
+                lst->tab->monstres[i].x -= d;
+                if(plateau.chemin[lst->tab[i].monstres[j].indice_case_actuelle].x * LONGUEUR_CASE + CENTRE_CASE > lst->tab[i].monstres[j].x *LONGUEUR_CASE + CENTRE_CASE){
+                    lst->tab[i].monstres[j].x = plateau.chemin[lst->tab[i].monstres[j].indice_case_actuelle].x * LONGUEUR_CASE / 2;
+                    lst->tab[i].monstres[j].indice_case_actuelle ++;
+                }
+            case BAS:
+                lst->tab->monstres[i].x += d;
+                if(plateau.chemin[lst->tab[i].monstres[j].indice_case_actuelle].x * LONGUEUR_CASE + CENTRE_CASE < lst->tab[i].monstres[j].x *LONGUEUR_CASE + CENTRE_CASE){
+                    lst->tab[i].monstres[j].x = plateau.chemin[lst->tab[i].monstres[j].indice_case_actuelle].x * LONGUEUR_CASE / 2;
+                    lst->tab[i].monstres[j].indice_case_actuelle ++;
+                }
+            case GAUCHE:
+                lst->tab->monstres[i].y -= d;
+                if(plateau.chemin[lst->tab[i].monstres[j].indice_case_actuelle].y * LONGUEUR_CASE + CENTRE_CASE > lst->tab[i].monstres[j].y *LONGUEUR_CASE + CENTRE_CASE){
+                    lst->tab[i].monstres[j].y = plateau.chemin[lst->tab[i].monstres[j].indice_case_actuelle].y * LONGUEUR_CASE / 2;
+                    lst->tab[i].monstres[j].indice_case_actuelle ++;
+                }
+            case DROITE:
+                lst->tab->monstres[i].x += d;
+                if(plateau.chemin[lst->tab[i].monstres[j].indice_case_actuelle].y * LONGUEUR_CASE + CENTRE_CASE < lst->tab[i].monstres[j].y *LONGUEUR_CASE + CENTRE_CASE){
+                    lst->tab[i].monstres[j].y = plateau.chemin[lst->tab[i].monstres[j].indice_case_actuelle].y * LONGUEUR_CASE / 2;
+                    lst->tab[i].monstres[j].indice_case_actuelle ++;
+                }
+            }
+        }
+    }
+}
+

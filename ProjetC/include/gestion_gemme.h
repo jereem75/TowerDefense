@@ -31,7 +31,7 @@ typedef struct{
 } Liste_gemme;
 
 /* fonction qui initialise la structure Liste_gemme*/
-void intialise_gemme(Liste_gemme *lst);
+void initialise_gemme(Liste_gemme *lst);
 
 /* fonction qui renvoie la teinte en fonction du type de gemme*/
 int def_teinte(Gemme *gem);

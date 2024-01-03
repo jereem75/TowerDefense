@@ -5,7 +5,7 @@
 #include <math.h>
 
 
-void intialisation_mana( Mana *mana){
+void initialisation_mana( Mana *mana){
     mana->nb_mana = 1500;
     mana->nb_max_mana = 2000;
     mana->niveau = 0;

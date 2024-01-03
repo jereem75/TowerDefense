@@ -6,7 +6,7 @@
 #include <math.h>
 
 
-void intialise_gemme(Liste_gemme *lst){
+void initialise_gemme(Liste_gemme *lst){
     //lst->nb_gemmes = 0;
     lst->nb_gemmes_file = 0;
     for(int i = 0; i < 10 ; i++ ){
