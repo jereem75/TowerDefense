@@ -18,7 +18,7 @@ void afficher_plateau(Terrain *jeu) {
         }
     }
     for(int i = 0; i < jeu->longueur; i++){
-        MLV_draw_filled_rectangle(jeu->chemin[i].y * LONGUEUR_CASE, jeu->chemin[i].x * LONGUEUR_CASE, LONGUEUR_CASE , LONGUEUR_CASE, MLV_COLOR_YELLOW1);
+        MLV_draw_filled_rectangle(jeu->chemin[i].y * LONGUEUR_CASE, jeu->chemin[i].x * LONGUEUR_CASE, LONGUEUR_CASE , LONGUEUR_CASE, MLV_COLOR_GREY);
         MLV_draw_rectangle(jeu->chemin[i].y * LONGUEUR_CASE, jeu->chemin[i].x * LONGUEUR_CASE, LONGUEUR_CASE , LONGUEUR_CASE, MLV_COLOR_BLACK);
     }
     MLV_draw_filled_rectangle(jeu->chemin[0].y * LONGUEUR_CASE, jeu->chemin[0].x * LONGUEUR_CASE, LONGUEUR_CASE , LONGUEUR_CASE, MLV_COLOR_PURPLE1);
@@ -86,7 +86,7 @@ int clic(Game *game, int *statut_t, int *statut_gemme, int *lvl_selected) {
                 return 0;
             }
             else if(x > 1100 && x < 1512 && y > 1410 && x < 1485){
-                game->vagues.vague_actuelle ++;
+                //game->vagues.vague_actuelle ++;
                 return 1;
             }
             else if(x > 1100 && x < 1512 && y > 1300 && y < 1400){
@@ -197,7 +197,6 @@ int est_case_grille(int x, int y){
 void affiche_tours(Game jeu, int statut_t ){
     int n = jeu.tours.nb_tours;
     for(int i = 0; i < n; i++){
-        printf("%d\n", jeu.tours.lst_tours[i].gem.teinte );
         if(jeu.tours.lst_tours[i].gem.teinte != -1){
             MLV_draw_filled_circle(jeu.tours.lst_tours[i].position.y * LONGUEUR_CASE + LONGUEUR_CASE / 2, jeu.tours.lst_tours[i].position.x * LONGUEUR_CASE + LONGUEUR_CASE / 2, LONGUEUR_CASE / 2, convert_angle_to_color(jeu.tours.lst_tours[i].gem.teinte ));
             MLV_draw_text(jeu.tours.lst_tours[i].position.y * LONGUEUR_CASE + LONGUEUR_CASE / 3 - 10, jeu.tours.lst_tours[i].position.x * LONGUEUR_CASE + LONGUEUR_CASE / 3, "LVL %d", MLV_COLOR_BLACK, jeu.tours.lst_tours[i].gem.niveau);
@@ -223,16 +222,43 @@ void affiche_monstres(Game jeu){
     for(int i = 0; i < n; i ++){
         int nb = jeu.vagues.tab[i].nb_monstres;
         for (int j = 0; j < nb; j++){
-            MLV_draw_filled_circle(jeu.vagues.tab[i].monstres[j].y, jeu.vagues.tab[i].monstres[j].x, 15, MLV_COLOR_RED);
+            //printf("%d\n", nb);
+            if(jeu.vagues.tab[i].monstres[j].indice_case_actuelle == jeu.plateau.longueur - 1){
+                continue;
+            }
+            if(jeu.vagues.tab[i].monstres[j].indice_case_actuelle != 0 && jeu.vagues.tab[i].monstres[j].hp_initial > 0){
+                MLV_draw_filled_circle(jeu.vagues.tab[i].monstres[j].y * LONGUEUR_CASE + CENTRE_CASE, jeu.vagues.tab[i].monstres[j].x  * LONGUEUR_CASE + CENTRE_CASE, 15, convert_angle_to_color(jeu.vagues.tab[i].monstres[j].teinte));
+                char* type= affiche_type_monstre(jeu.vagues.tab[i]);
+                MLV_draw_text(jeu.vagues.tab[i].monstres[j].y * LONGUEUR_CASE + 10, jeu.vagues.tab[i].monstres[j].x  * LONGUEUR_CASE - 15,"%s", MLV_COLOR_BLACK, type);
+                MLV_draw_filled_rectangle(jeu.vagues.tab[i].monstres[j].y * LONGUEUR_CASE + 10, jeu.vagues.tab[i].monstres[j].x  * LONGUEUR_CASE,35, 10, MLV_COLOR_RED);
+                MLV_draw_filled_rectangle(jeu.vagues.tab[i].monstres[j].y * LONGUEUR_CASE + 10, jeu.vagues.tab[i].monstres[j].x  * LONGUEUR_CASE,35 * (jeu.vagues.tab[i].monstres[j].hp_restants / jeu.vagues.tab[i].monstres[j].hp_initial), 10, MLV_COLOR_GREEN1);
+                //printf("vie %d\n", jeu.vagues.tab[i].monstres[j].hp_restants / jeu.vagues.tab[i].monstres[j].hp_initial);
+  
+            }
+            
         }
     }
 }
 
 
 void info_vague(Game jeu, long int temps){
-    MLV_draw_text_box(1100,1410,412,85, "LANCER LA VAGUE %d",25,MLV_COLOR_BLACK,MLV_COLOR_BLACK,MLV_COLOR_WHITE,MLV_TEXT_CENTER,MLV_HORIZONTAL_CENTER,MLV_VERTICAL_CENTER, jeu.vagues.vague_actuelle + 2);
-    if(jeu.vagues.vague_actuelle >= 0){
-        MLV_draw_text_box(0,1460, 500, 50, "VAGUE N°%d, TEMPS RESTANT AVANT LA PROCHAINE VAGUE %ld",25,MLV_COLOR_BLACK,MLV_COLOR_WHITE,MLV_COLOR_BLACK,MLV_TEXT_CENTER,MLV_HORIZONTAL_CENTER,MLV_VERTICAL_CENTER, jeu.vagues.vague_actuelle + 1, temps);
+    MLV_draw_text_box(1100,1410,412,85, "LANCER LA VAGUE %d",25,MLV_COLOR_BLACK,MLV_COLOR_BLACK,MLV_COLOR_WHITE,MLV_TEXT_CENTER,MLV_HORIZONTAL_CENTER,MLV_VERTICAL_CENTER, jeu.vagues.vague_actuelle + 1);
+    if(jeu.vagues.vague_actuelle > 0){
+        MLV_draw_text_box(0,1460, 500, 50, "VAGUE N°%d, TEMPS RESTANT AVANT LA PROCHAINE VAGUE %ld",25,MLV_COLOR_BLACK,MLV_COLOR_WHITE,MLV_COLOR_BLACK,MLV_TEXT_CENTER,MLV_HORIZONTAL_CENTER,MLV_VERTICAL_CENTER, jeu.vagues.vague_actuelle, temps);
 
     }
+}
+
+char* affiche_type_monstre(Vague monster){
+    switch(monster.type_vague){
+        case NORMAL:
+            return "NORMAL";
+        case FOULE:
+            return "FOULE";
+        case AGILE:
+            return "AGILE";
+        case BOSS:
+            return "BOSS";
+    }
+    return "NULL";
 }

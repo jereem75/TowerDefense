@@ -37,4 +37,7 @@ void info_vague(Game jeu, long int temps);
 
 void affiche_monstres(Game jeu);
 
+
+char* affiche_type_monstre(Vague monster);
+
 #endif

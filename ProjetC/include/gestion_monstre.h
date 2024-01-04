@@ -37,7 +37,7 @@ typedef struct{
 }Lst_Vague;
 
 /* fonction qui renvoie un type de vague en fonction des probabilites*/
-Type random_vague();
+Type random_vague(int vague_actuelle);
 
 /* fonction qui initialise la structure Monstre*/
 void intialisation_monstre(Terrain plateau, Vague *new, int nb_vague);

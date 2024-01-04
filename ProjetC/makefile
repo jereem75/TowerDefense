@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -std=gnu99 -Wall
+CFLAGS = -std=c17 -Wall
 LDLIBS = -lm -lrt -lMLV
 TOUT = bin/gestion_gemme.o bin/main.o bin/generation_terrain.o bin/gestion_monstre.o bin/gestion_tirs.o bin/gestion_tour.o bin/graphique.o bin/gestion_mana.o bin/moteur.o
 
