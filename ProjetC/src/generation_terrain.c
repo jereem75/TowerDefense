@@ -16,39 +16,39 @@ void random_nid(Terrain *plateau){
     while(1){
         x = rand() % LIG;
         y = rand() % COL;
-        if(x < 3 || x > LIG - 3){
+        if(x < 2 || x >= LIG - 2){ // on verifie qu'il n'est pas a deux cases du bord
             continue;
         }
-        if(y < 3 || y > COL - 3){
+        if(y < 2 || y >= COL - 2){
             continue;
         }
-        plateau->nid.x = x;
+        plateau->nid.x = x; // on initalise le nid
         plateau->nid.y = y;
         plateau->nid.suiv = HAUT;
         break;
     }
 }
 
-void initialise_cases(Terrain *plateau) {
+/*void initialise_cases(Terrain *plateau) {
     for (int i = 0; i < LIG; ++i) {
         for (int j = 0; j < COL; ++j) {
             plateau->tab[i][j].x = i;
             plateau->tab[i][j].y = j;
         }
     }
-}
+}*/
 
-void afficherTableau(Terrain plateau) {
+/*void afficherTableau(Terrain plateau) {
     for (int i = 0; i < LIG; ++i) {
         for (int j = 0; j < COL; ++j) {
             printf("(%d,%d) ", plateau.tab[i][j].x, plateau.tab[i][j].y);
         }
         printf("\n");
     }
-}
+}*/
 
 int est_definie(Case a){
-    if(a.x < 2 || a.x >= LIG - 2 || a.y < 2 || a.y >= COL - 2){
+    if(a.x < 2 || a.x >= LIG - 2 || a.y < 2 || a.y >= COL - 2){ // on regarde si la case est definie
         return 0;
     }
     return 1;
@@ -58,7 +58,7 @@ int est_definie(Case a){
 int etendu(Terrain plateau, Case a, Direction dir) {
     int longueur = 0;
     Case suiv;
-    switch (dir) {
+    switch (dir) { // on calcule l'etendue pour chaque direction
         case HAUT:
             suiv.x = a.x - 1;
             suiv.y = a.y;
@@ -92,7 +92,7 @@ int etendu(Terrain plateau, Case a, Direction dir) {
             }
             break;
         default:
-        printf("erreur\n");
+        fprintf(stderr,"erreur\n");
             return 0;
     }
     return longueur;
@@ -103,7 +103,7 @@ int etendu(Terrain plateau, Case a, Direction dir) {
 
 
 int compare_chemin(Case a, Terrain plateau){
-    for(int i = 0; i < plateau.longueur - 2; i++ ){
+    for(int i = 0; i < plateau.longueur - 2; i++ ){ // on regarde si les cases sont suffisament eloignée du chemin
         if(distance_manhattan(a, plateau.chemin[i]) <= 2){
             return 1;
         }
@@ -113,13 +113,14 @@ int compare_chemin(Case a, Terrain plateau){
 
 
 Direction direction_initiale(Terrain plateau, Case nid) {
+    // on calcule l'etendue pour chaque direction
     int etendu_haut = etendu(plateau, nid, HAUT);
     int etendu_bas = etendu(plateau, nid, BAS);
     int etendu_gauche = etendu(plateau, nid, GAUCHE);
     int etendu_droite = etendu(plateau, nid, DROITE);
     int somme_etendus = 0;
     somme_etendus = etendu_haut + etendu_bas + etendu_gauche + etendu_droite;
-    int random_num = rand() % somme_etendus;
+    int random_num = rand() % somme_etendus; // on choisit une direction au hasard en fonction des etendues
     if (random_num < etendu_haut) {
         return HAUT;
     } else if (random_num < etendu_haut + etendu_bas) {
@@ -137,34 +138,29 @@ void generation(Terrain *plateau){
     plateau->longueur = 0;
     plateau->chemin = NULL;
     random_nid(plateau);
-    plateau->chemin = (Case *)malloc(sizeof(Case) * 75);
+    plateau->chemin = (Case *)malloc(sizeof(Case) * 85); // on alloue au minimum 85 cases
     if (plateau->chemin == NULL) {
         fprintf(stderr, "erreur d'allocation\n");
         return;
     }
-    plateau->chemin[0] = plateau->nid;
+    plateau->chemin[0] = plateau->nid; // on affecte le nid
     plateau->longueur ++;
-    Direction dir = direction_initiale(*plateau, plateau->nid);
+    Direction dir = direction_initiale(*plateau, plateau->nid); // on choisit une direction initiale
     Case initial = plateau->nid;
-    while (plateau->longueur < 75 || plateau->nb_virages <= 7) {
-        //printf("boucle\n");
-        int n = etendu(*plateau, initial, dir);
-        //printf("etendue %d\n", n);
-        //printf("longueur = %d\n", plateau->longueur);
+    while (plateau->longueur < 85 || plateau->nb_virages <= 7) { // tant que le chemin n'est pas termine
+        int n = etendu(*plateau, initial, dir); // on calcule l'etendue en fonction de la direction
         if (n <= 2) {
-            
-            printf("erreur\n");
-            free(plateau->chemin);
+            // si inferieur ou egal a deux on recommence
+            free(plateau->chemin); // on libere la memoire du precedent chemin
             plateau->chemin = NULL;
             plateau->longueur = 0;
             plateau->nb_virages = 0;
-            generation(plateau);
+            generation(plateau); // on recommence
             return;
         }
-        //printf("etendue = %d\n", n);
         int s = 0;
         int nb = 0;
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) { // on choisit un nombres de cases au hasard
             nb = rand() % 4;
             if (nb < 3) {
                 s += 1;
@@ -173,14 +169,18 @@ void generation(Terrain *plateau){
         if(s < 3){
             s = 3;
         }
-       //printf("nb_cases = %d\n", s);
-        ajoute_cases_chemin(plateau, initial, dir, s - 1);
-        dir = prochaine_direction(*plateau, dir);
+        ajoute_cases_chemin(plateau, initial, dir, s - 1); // on ajoutes les cases au chemin
+        if(prochaine_direction(*plateau, dir, &dir) == -1){ // on tire la prochaine direction
+            free(plateau->chemin); // on libere la memoire du precedent chemin
+            plateau->chemin = NULL;
+            plateau->longueur = 0;
+            plateau->nb_virages = 0;
+            generation(plateau); // on recommence
+            return;
+        }
         initial = plateau->chemin[plateau->longueur - 1];
         plateau->nb_virages ++;
-        //printf("%d, %d\n", plateau->longueur, plateau->nb_virages);
         //affiche_chemin(*plateau);
-        //sleep(1);
     }
     plateau->nb_virages  --;
     //test(*plateau);
@@ -189,12 +189,12 @@ void generation(Terrain *plateau){
 
 void ajoute_cases_chemin(Terrain *plateau, Case a, Direction dir, int nb_cases){
     Case suiv;
-    for (int i = 1; i <= nb_cases + 1; i++) {
+    for (int i = 1; i <= nb_cases + 1; i++) { // on boucle pour ajouter nb_cases
         switch (dir) {
             case HAUT:
                 suiv.x = a.x - i;
                 suiv.y = a.y;
-                break;  
+                break;
             case BAS:
                 suiv.x = a.x + i;
                 suiv.y = a.y;
@@ -209,36 +209,33 @@ void ajoute_cases_chemin(Terrain *plateau, Case a, Direction dir, int nb_cases){
                 break;
             default:
                 fprintf(stderr, "Direction invalide\n");
-                return; 
+                return;
         }
-        if(plateau->longueur >= 75){
-            //printf("test\n");
+        if(plateau->longueur >= 85){ // si le chemin n'est pas assez grand on realloue
             plateau->chemin = (Case*)realloc(plateau->chemin, sizeof(Case) * (plateau->longueur + 1));
             if(plateau->chemin == NULL){
                 fprintf(stderr, "Erreur d'allocation\n");
-                return;  
+                return;
             }
         }
         plateau->chemin[plateau->longueur - 1].suiv = dir;
         suiv.suiv = dir;
         plateau->chemin[plateau->longueur] = suiv;
         plateau->longueur ++;
-        
-        
+        // on ajoute les cases
+
     }
-    //printf("%d\n", plateau->longueur);
-    //printf("%d\n", plateau->nb_virages);
 }
 
 
-Direction prochaine_direction(Terrain plateau, Direction derniere_dir){
+int prochaine_direction(Terrain plateau, Direction derniere_dir, Direction *next){
     int etendu_droite, etendu_gauche;
     int somme = 0;
-    switch (derniere_dir) {
+    switch (derniere_dir) { // en fonction de la derniere direction on calcule la prochaine avec l'etendu
             case HAUT:
                 etendu_droite = etendu(plateau, plateau.chemin[plateau.longueur - 1], DROITE);
                 etendu_gauche = etendu(plateau, plateau.chemin[plateau.longueur - 1], GAUCHE);
-                break;  
+                break;
             case BAS:
                 etendu_droite = etendu(plateau, plateau.chemin[plateau.longueur - 1], GAUCHE);
                 etendu_gauche = etendu(plateau, plateau.chemin[plateau.longueur - 1], DROITE);
@@ -253,37 +250,44 @@ Direction prochaine_direction(Terrain plateau, Direction derniere_dir){
                 break;
             default:
                 fprintf(stderr, "Direction invalide\n");
-                return HAUT; 
+                return HAUT;
     }
     somme = etendu_droite + etendu_gauche;
+    if(somme == 0){
+      return -1;
+    }
     int nb = rand() % somme;
     if (nb < etendu_droite){
-        switch (derniere_dir){
+        switch (derniere_dir){ // on l'a renvoie
             case HAUT:
-                return DROITE;
+                *next = HAUT;
+                break;
             case BAS:
-                return GAUCHE;
+                *next = GAUCHE;
+                break;
             case DROITE:
-                return BAS;
+                *next = BAS;
+                break;
             case GAUCHE:
-                return HAUT;
-            default:
-                return HAUT;
+                *next = HAUT;
+                break;
         }
     }
     switch (derniere_dir){
             case HAUT:
-                return GAUCHE;
+                *next = GAUCHE;
+                break;
             case BAS:
-                return DROITE;
+                *next = DROITE;
+                break;
             case DROITE:
-                return HAUT;
+                *next = HAUT;
+                break;
             case GAUCHE:
-                return BAS;
-            default:
-                return HAUT;
+                *next = BAS;
+                break;
         }
-    
+    return 1;
 }
 
 
@@ -291,7 +295,7 @@ int est_case_chemin(Terrain plateau, Case a){
     if(plateau.chemin == NULL){
         return 0;
     }
-    for(int i = 0; i < plateau.longueur; i++){
+    for(int i = 0; i < plateau.longueur; i++){ // on regarde si la case est une case du chemin
         if(plateau.chemin[i].x == a.x && plateau.chemin[i].y == a.y){
             return 1;
         }
@@ -299,7 +303,7 @@ int est_case_chemin(Terrain plateau, Case a){
     return 0;
 }
 
-void affiche_chemin(Terrain plateau) {
+/*void affiche_chemin(Terrain plateau) {
     for (int i = 0; i < LIG; ++i) {
         for (int j = 0; j < COL; ++j) {
             if(plateau.nid.x == i && plateau.nid.y == j ){
@@ -313,10 +317,10 @@ void affiche_chemin(Terrain plateau) {
         }
         fprintf(stdout, "\n");
     }
-}
+}*/
 
-void test(Terrain jeu){
+/*void test(Terrain jeu){
     for(int i = 0; i < jeu.longueur; i++){
         printf("Case %d suiv = %d\n", i, jeu.chemin[i].suiv);
     }
-}
+}*/

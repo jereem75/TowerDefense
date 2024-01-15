@@ -7,19 +7,17 @@
 #include "../include/graphique.h"
 #include "../include/moteur.h"
 
+
+
 int main(){
-    MLV_create_window("TowerDefense", "TowerD", 1512, 1500);
+    MLV_create_window("TowerDefense", "TowerD", COL * LONGUEUR_CASE, LIG * LONGUEUR_CASE + 200); // on cree la fenetre graphique
     srand(time(NULL));
     Game jeu;
     initialise(&jeu);
-    //afficherTableau(test);
-    generation(&(jeu).plateau);
-    printf("main\n");
-    //affiche_chemin(jeu.plateau);
-    afficher_plateau(&(jeu).plateau);
-    //printf("longuueur = %d, virage = %d\n", test.longueur, test.nb_virages);
-    moteur(&jeu);
-    //MLV_wait_seconds(5);
+    generation(&(jeu).plateau); // on genere le chemin
+    afficher_plateau(&(jeu).plateau); // on affiche le plateau
+    moteur(&jeu); // on lance le jeu
+    affiche_resultats(jeu);
     MLV_free_window();
     return 0;
 }

@@ -7,6 +7,7 @@
 #include "gestion_gemme.h"
 #include "gestion_tour.h"
 #include "moteur.h"
+#include "gestion_monstre.h"
 
 
 

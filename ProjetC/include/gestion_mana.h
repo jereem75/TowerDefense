@@ -2,7 +2,6 @@
 #define GESTION_MA
 #include <stdlib.h>
 #include <stdio.h>
-#include "gestion_monstre.h"
 
 
 
@@ -20,9 +19,9 @@ void initialisation_mana( Mana *mana);
 void up_lvl_mana( Mana *mana);
 
 /* fonction qui gere le niveau de la mana en fonction du monstre tue*/
-void gain_mana(Mana *mana, Monstre monster);
+void gain_mana(Mana *mana, int hp_initial);
 
-/* fonction qui gere la mana en fonction du monstre*/
-void perte_mana(Mana *mana, Monstre monster);
+/* fonction qui calcule la mana perdue en fonction du monstre arrivant au camp du joueur*/
+void perte_mana(Mana *mana, int hp_initial);
 
 #endif
