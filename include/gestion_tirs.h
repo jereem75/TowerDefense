@@ -3,9 +3,11 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+
 #include "generation_terrain.h"
 #include "gestion_monstre.h"
 #include "gestion_gemme.h"
+
 #define D 8
 
 typedef struct{
@@ -15,6 +17,7 @@ typedef struct{
     int indice_monstre;
     int nb_tirs; 
 }Tir;
+
 
 /* fontion qui initalise la structure tir en fonction des positions de la tour */
 void initialisation_tir(Tir *tir, int x_tour, int y_tour);

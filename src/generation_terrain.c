@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../include/generation_terrain.h"
 #include <math.h>
 #include <time.h>
 #include "unistd.h"
+
+#include "../include/generation_terrain.h"
 #include "../include/graphique.h"
 
 int distance_manhattan(Case i, Case j){
@@ -29,23 +30,6 @@ void random_nid(Terrain *plateau){
     }
 }
 
-/*void initialise_cases(Terrain *plateau) {
-    for (int i = 0; i < LIG; ++i) {
-        for (int j = 0; j < COL; ++j) {
-            plateau->tab[i][j].x = i;
-            plateau->tab[i][j].y = j;
-        }
-    }
-}*/
-
-/*void afficherTableau(Terrain plateau) {
-    for (int i = 0; i < LIG; ++i) {
-        for (int j = 0; j < COL; ++j) {
-            printf("(%d,%d) ", plateau.tab[i][j].x, plateau.tab[i][j].y);
-        }
-        printf("\n");
-    }
-}*/
 
 int est_definie(Case a){
     if(a.x < 2 || a.x >= LIG - 2 || a.y < 2 || a.y >= COL - 2){ // on regarde si la case est definie
@@ -180,10 +164,8 @@ void generation(Terrain *plateau){
         }
         initial = plateau->chemin[plateau->longueur - 1];
         plateau->nb_virages ++;
-        //affiche_chemin(*plateau);
     }
     plateau->nb_virages  --;
-    //test(*plateau);
 }
 
 
@@ -303,24 +285,3 @@ int est_case_chemin(Terrain plateau, Case a){
     return 0;
 }
 
-/*void affiche_chemin(Terrain plateau) {
-    for (int i = 0; i < LIG; ++i) {
-        for (int j = 0; j < COL; ++j) {
-            if(plateau.nid.x == i && plateau.nid.y == j ){
-                fprintf(stdout, "D ");
-            }
-            else if (est_case_chemin(plateau, plateau.tab[i][j]) == 1) {
-                fprintf(stdout, "C ");
-            } else {
-                fprintf(stdout, ". ");
-            }
-        }
-        fprintf(stdout, "\n");
-    }
-}*/
-
-/*void test(Terrain jeu){
-    for(int i = 0; i < jeu.longueur; i++){
-        printf("Case %d suiv = %d\n", i, jeu.chemin[i].suiv);
-    }
-}*/

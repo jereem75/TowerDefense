@@ -1,15 +1,18 @@
 #ifndef GESTION_MO
 #define GESTION_MO
 
+#include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+
 #include "generation_terrain.h"
 #include "gestion_mana.h"
 #include "gestion_gemme.h"
-#include <time.h>
+
 #define NB_MAX 24
 #define H 10
 #define MAX_VAGUES 1000
+
 
 typedef enum{
     NORMAL,

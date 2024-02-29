@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../include/gestion_mana.h"
 #include <math.h>
+
+#include "../include/gestion_mana.h"
+
 
 
 void initialisation_mana( Mana *mana){ // on initalise la mana avec les valeurs de base

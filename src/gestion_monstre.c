@@ -1,9 +1,11 @@
 #define _POSIX_C_SOURCE 199309L
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <unistd.h>
 #include <sys/resource.h>
+
 #include "../include/gestion_monstre.h"
 #include "../include/generation_terrain.h"
 #include "../include/graphique.h"

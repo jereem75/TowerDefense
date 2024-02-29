@@ -1,12 +1,15 @@
 #define _POSIX_C_SOURCE 199309L
+
 #include <stdio.h>
 #include <stdlib.h>
+#include "time.h"
+#include <math.h>
+
 #include "../include/gestion_tirs.h"
 #include "../include/gestion_monstre.h"
 #include "../include/generation_terrain.h"
 #include "../include/gestion_gemme.h"
-#include "time.h"
-#include <math.h>
+
 
 
 

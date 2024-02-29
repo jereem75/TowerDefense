@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <MLV/MLV_all.h>
+#include <math.h>
+
 #include "../include/graphique.h"
 #include "../include/generation_terrain.h"
 #include "../include/gestion_gemme.h"
 #include "../include/gestion_tour.h"
-#include <MLV/MLV_all.h>
-#include <math.h>
+
 
 
 void afficher_plateau(Terrain *jeu) {
@@ -230,8 +232,6 @@ void affiche_monstres(Game jeu){
                 MLV_draw_text(jeu.vagues.tab[i].monstres[j].y * LONGUEUR_CASE, jeu.vagues.tab[i].monstres[j].x  * LONGUEUR_CASE - 15,"%s", MLV_COLOR_BLACK, effet);
                 MLV_draw_filled_rectangle(jeu.vagues.tab[i].monstres[j].y * LONGUEUR_CASE + 10, jeu.vagues.tab[i].monstres[j].x  * LONGUEUR_CASE,35, 10, MLV_COLOR_RED);
                 MLV_draw_filled_rectangle(jeu.vagues.tab[i].monstres[j].y * LONGUEUR_CASE + 10, jeu.vagues.tab[i].monstres[j].x  * LONGUEUR_CASE,35 * (jeu.vagues.tab[i].monstres[j].hp_restants /(double) jeu.vagues.tab[i].monstres[j].hp_initial ), 10, MLV_COLOR_GREEN1);
-                //printf("vie %d\n", jeu.vagues.tab[i].monstres[j].hp_restants / jeu.vagues.tab[i].monstres[j].hp_initial);
-
             }
 
         }

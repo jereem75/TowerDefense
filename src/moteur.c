@@ -1,20 +1,21 @@
 #define _POSIX_C_SOURCE 199309L
+
 #include <stdio.h>
 #include <stdlib.h>
-#include "../include/moteur.h"
-#include "../include/gestion_gemme.h"
-#include "../include/generation_terrain.h"
-#include "../include/graphique.h"
 #include <MLV/MLV_all.h>
 #include <time.h>
 #include <unistd.h>
 #include <sys/resource.h>
 
+#include "../include/moteur.h"
+#include "../include/gestion_gemme.h"
+#include "../include/generation_terrain.h"
+#include "../include/graphique.h"
+
 
 void initialise(Game *jeu) {
     initialisation_mana(&(jeu->mana));
     initialise_gemme(&(jeu->gemmes));
-    //initialise_cases(&(jeu->plateau));
     jeu->tours.nb_tours = 0;
     jeu->vagues.vague_actuelle = 0;
     jeu->vagues.total_degats = 0;

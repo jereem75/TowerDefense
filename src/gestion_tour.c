@@ -1,13 +1,15 @@
 #define _POSIX_C_SOURCE 199309L
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
+
 #include "../include/gestion_tour.h"
 #include "../include/gestion_mana.h"
 #include "../include/gestion_gemme.h"
 #include "../include/generation_terrain.h"
-//#include "../include/gestion_monstre.h"
-#include <math.h>
+
 
 
 int est_case_tour(Lst_Tour lst, Case a){
@@ -30,7 +32,6 @@ void build_tour(Terrain plateau, Mana *gestion, Lst_Tour *lst, int x, int y){
     Case tmp;
     tmp.x = x;
     tmp.y = y;
-    //fprintf(stderr, "%d,%d\n", tmp.x, tmp.y);
     if( est_case_chemin(plateau, tmp) == 1 || est_case_tour(*lst, tmp) > - 1){
         fprintf(stderr, "occupee\n");
         // la case  fait partie du chemin ou est une tour

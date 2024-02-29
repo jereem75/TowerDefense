@@ -1,8 +1,8 @@
 #ifndef GESTION_MA
 #define GESTION_MA
+
 #include <stdlib.h>
 #include <stdio.h>
-
 
 
 typedef struct{

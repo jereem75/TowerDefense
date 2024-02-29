@@ -3,9 +3,11 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <MLV/MLV_all.h>
+
 #include "generation_terrain.h"
 #include "moteur.h"
-#include <MLV/MLV_all.h>
+
 #define LONGUEUR_CASE 35
 #define CENTRE_CASE LONGUEUR_CASE / 2
 

@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
+
 #include "../include/gestion_gemme.h"
 #include "../include/gestion_mana.h"
 #include "../include/generation_terrain.h"
-#include <math.h>
+
 
 
 void initialise_gemme(Liste_gemme *lst){

@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <MLV/MLV_all.h>
+#include <time.h>
+
 #include "../include/generation_terrain.h"
 #include "../include/gestion_mana.h"
-#include <time.h>
-#include <MLV/MLV_all.h>
 #include "../include/graphique.h"
 #include "../include/moteur.h"
 

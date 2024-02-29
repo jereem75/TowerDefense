@@ -1,9 +1,12 @@
 #ifndef GESTION_TO
 #define GESTION_TO
+
 #define MAX_TOURS 541
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+
 #include "gestion_gemme.h"
 #include "generation_terrain.h"
 #include "gestion_mana.h"

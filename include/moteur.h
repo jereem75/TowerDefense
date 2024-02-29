@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+
 #include "generation_terrain.h"
 #include "gestion_gemme.h"
 #include "gestion_tour.h"
@@ -18,7 +19,6 @@ typedef struct{
     Lst_Tour tours;
     Lst_Vague vagues;
 }Game;
-
 
 
 /* fonction qui initialise la structure Game */

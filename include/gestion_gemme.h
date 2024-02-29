@@ -3,9 +3,12 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#define MAX_GEMMES 1000
 #include "gestion_mana.h"
-//#include "gestion_tour.h"
+
+#define MAX_GEMMES 1000
+
+
+
 
 
 typedef enum{

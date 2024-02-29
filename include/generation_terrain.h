@@ -22,24 +22,18 @@ typedef struct{
 }Case;
 
 typedef struct{
-    //Case tab[LIG][COL];
     Case *chemin; // tableau du chemin reliant le nid au camp
     Case nid; // nid des monstres
     int nb_virages;
     int longueur;
 }Terrain;
 
-/* fonction qui initialise les cases du terrain */
-void initialise_cases(Terrain *plateau);
 
 /* fonction qui calcule la distance de manhattan entre deux */
 int distance_manhattan(Case i, Case j);
 
 /* fonction qui prend une case aleatoire comme nid de mosntres*/
 void random_nid(Terrain *plateau);
-
-/* fonction qui affiche le tableau de cases*/
-//void afficherTableau(Terrain tab);
 
 /* fonction qui calcule l'etendu d'une case dans une direction dir*/
 int etendu(Terrain plateau, Case a, Direction dir);
@@ -62,7 +56,5 @@ int prochaine_direction(Terrain plateau, Direction derniere_dir, Direction *dir)
 /* fonction qui renvoie 1 si la case a fait partie du chemin*/
 int est_case_chemin(Terrain plateau, Case a);
 
-/* fonction qui affiche le chemin dans la grille*/
-//void affiche_chemin(Terrain plateau);
 
 #endif
